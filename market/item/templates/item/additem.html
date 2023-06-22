@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="col-md-6 offset-md-3 my-4">
+    <h1 class="text-center text-primary-emphasis">New Item</h1>
+    <form method="POST" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.errors or form.non_field_errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Cannot add Item try again
+            {% for field in form %}
+                {% if field.errors %}
+                    {{ field.errors }}
+                {% endif %}
+                {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-success w-25 mt-3 py-2">Submit</button>
+        <a href="{% url 'core:home' %}", class="btn btn-secondary mt-3 px-3 py-2">Back</a>
+    </form>
+</div>
+
+{% endblock %}

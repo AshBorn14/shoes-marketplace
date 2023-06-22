@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex  mt-4">
+    <a href="{% url 'core:home' %}">
+        <i class="fa-sharp fa-solid fa-circle-arrow-left fs-1 mx-4 text-dark"></i>
+    </a>
+<div class="mb-3 mx-auto" style="max-width:80%">
+    <div class="d-flex">
+      <div class="col-md-4 action-checkbox">
+        <img src={{ item.image.url }} class="img-fluid rounded-2 h-100 ">
+      </div>
+      <div class="col-md-8">
+        <div class="bg-secondary-subtle py-3 px-4 ms-3 h-100 rounded-2 d-flex flex-column">
+          <h2 class="card-title"><b>{{item.name}}</b></h2>
+          <p class="card-title fs-4"><b>Price:</b> ${{ item.price }}</p>
+          {% if item.description %}
+            <p class="card-text mt-2"><b>Description:</b><br>{{ item.description }}</p>
+          {% endif %}
+          {% if request.user == item.created_by %}
+          <div class="mt-auto">
+                <div>
+                    <a href="{% url 'item:edit' item.id %}" class="btn btn-secondary mb-3 me-2 w-25">Edit</a>
+                    <a href="{% url 'item:delete' item.id %}" class="btn btn-danger mb-3 me-2 w-25">Delete</a>
+                </div>
+                <p class="card-text text-secondary border-top border-secondary-subtle pt-2 mt-auto">You are the owner of this Item</p>
+            </div>
+          {% else %}
+            <div class="mt-auto">
+                <p class="card-text"><small class="text-body-secondary">Seller: {{ item.created_by.username }}</small></p>
+                <div>
+                    <button class="btn btn-success btn-lg w-25">Purchase</button>
+                    <a href="{% url 'conversation:new' item.id %}" class="btn btn-info btn-lg">Contact Seller</a>
+                </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if related_items %}
+    <div class="w-auto my-4 mx-4 px-5 py-5 rounded-3">
+        <h2 class="fs-4 text-center mb-4">Related Items</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 ">
+            {% for related_item in related_items %}
+            <div class="col ">
+                
+                <div class="card h-auto" style="width: 18rem;">
+                    <a href="{% url 'item:detail' related_item.id %}" class='text-decoration-none'>
+                        <img src="{{ related_item.image.url }}" class="card-img-top w-100%" >
+                        <div class="card-body">
+                        <h5 class="card-title">{{ related_item.name }}</h5>
+                        <h5 class="card-title text-secondary">${{ related_item.price }}</h5>
+                        <a href="#" class="btn btn-success">Purchase</a>
+                    </a>
+                    
+                </div>
+            
+                
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
